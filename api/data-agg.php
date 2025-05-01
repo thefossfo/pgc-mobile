@@ -76,6 +76,7 @@ foreach ($launches as $launch) {
     $rocket_name = isset($launch['rocket']['configuration']['name']) ? $db->escapeString($launch['rocket']['configuration']['name']) : null;
     $mission_name = isset($launch['mission']['name']) ? $db->escapeString($launch['mission']['name']) : null;
     $mission_description = isset($launch['mission']['description']) ? $db->escapeString($launch['mission']['description']) : null;
+    $image = $db->escapeString($launch['image']);
 
     // Check if the launch ID already exists in the database
     $db->query("SELECT id FROM launch_data WHERE id = ?", [$id]);
@@ -94,7 +95,8 @@ foreach ($launches as $launch) {
             pad_longitude = ?,
             rocket_name = ?,
             mission_name = ?,
-            mission_description = ?
+	    mission_description = ?,
+            image = ?
             WHERE id = ?", [
                 $name,
                 $date,
@@ -109,6 +111,7 @@ foreach ($launches as $launch) {
                 $rocket_name,
                 $mission_name,
                 $mission_description,
+		$image,
                 $id
             ]);
 
