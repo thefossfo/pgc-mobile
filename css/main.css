@@ -1,0 +1,46 @@
+@font-face {
+	font-family: 'AlarmClock';
+	src: url('/pgc/fonts/alarm_clock.ttf') format('truetype');
+}
+/* Ensure the body and HTML elements take up the full viewport and prevent overflow */
+html, body {
+	color:#999;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	align-items: center;
+	justify-content: center;
+	background-color: #000;
+	font-family: lato, sans-serif;
+}
+
+/* Header */
+#header {
+	background: #222;
+	font-size: 3vh;
+	width: 100%;
+}
+#header img {
+width:1em;
+display:inline-block;
+vertical-align:middle;
+}
+/* Bottom menu */
+#bottom-menu {
+	display:table-row;
+}
+#bottom-menu-wrapper {
+	background: #222;
+	display:table;
+	font-size:5vh;
+	position: fixed;
+	padding:0.5vw;
+	bottom: 0;
+	width: 100%;
+}
+.bottom-menu-item {
+	width:25%;
+	text-align:center;
+	display:table-cell;
+}

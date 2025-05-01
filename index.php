@@ -1,7 +1,7 @@
 <?php
 
 //Include header file
-include("/var/www/html/include/header.php");
+include("include/header.php");
 
 //Define what page to show
 if (isset($_GET['page'])) {
@@ -33,10 +33,19 @@ for ($p=0;$p<count($PAGE_LIST);$p++) {
                 break;
         }
 }
-if (!isset($PAGE_INCLUDE)) {
-        //If the page doesn't exist throw error
-        page_error(404);
-}
 
+//Begin building page HTML
+$page_html = '<body>';
+
+//Include the current page
+include($PAGE_INCLUDE);
+
+//Done editing page HTML
+$page_html .= '</body>';
+
+//Output the HTML
+include("include/html_headers.php");
+include("include/html_footer.php");
+echo $page_html;
 
 ?>
