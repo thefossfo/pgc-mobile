@@ -20,10 +20,12 @@ html, body {
         border:1px solid #444;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 	background: #222;
+	display:table;
 	font-size: 3vh;
 	position:fixed;
 	top:0;
 	width: 100%;
+	z-index:500;
 }
 #header img {
 	width:1em;
@@ -48,6 +50,7 @@ html, body {
 	padding:0.5vw;
 	bottom: 0;
 	width: 100%;
+	z-index:500;
 }
 .bottom-menu-item {
 	width:25%;
@@ -85,11 +88,13 @@ html, body {
 	color: white;
 	padding: 1vw;
 	border-radius: 5px;
-	font-size: 1.2em;
+	font-size: 2em;
 	font-family:'AlarmClock';
 	opacity:0.75;
 	z-index: 10;
 	pointer-events: none;
+	text-align:center;
+	width:80%;
 }
 #launch-select {
 	background-color:#222;
@@ -98,6 +103,8 @@ html, body {
 	height:3vh;
 	margin-top:4vh;
 	width:100%;
+	z-index:500;
+	position:fixed;
 }
 
 /* Generic classes */
@@ -107,7 +114,7 @@ html, body {
 	border-radius: 4px;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 	color: #fff;
-	font-size:3vw;
+	font-size:4vw;
 	margin:1vh;
 	padding:1vw;
 }
