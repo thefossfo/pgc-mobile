@@ -7,24 +7,30 @@ include("include/header.php");
 if (isset($_GET['page'])) {
 	$PAGE = strtoupper($_GET['page']);
 } else {
-	header('Location: /pgc-mobile/index.php?page=select');
+	header('Location: /pgc-mobile/index.php?page=home');
 	die();
 }
 $PAGE_TITLE = "PGC Mobile";
 $PAGE_LIST = array(
+	"HOME",
 	"SELECT",
 	"LAUNCH",
-	"CAMERA"
+	"CAMERA",
+	"SETTINGS"
 );
 $PAGE_SRC = array(
+	"include/home.php",
 	"include/select_launch.php",
 	"include/show_launch.php",
-	"include/camera.php"
+	"include/camera.php",
+	"include/settings.php"
 );
 $PAGE_TITLES = array(
+	"Home",
 	"Select a launch",
 	"Launch details",
-	"Camera view"
+	"Camera view",
+	"Settings"
 );
 for ($p=0;$p<count($PAGE_LIST);$p++) {
         if ($PAGE_LIST[$p]==$PAGE) {

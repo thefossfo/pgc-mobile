@@ -18,7 +18,7 @@ $dbname = 'pgc';
 $db = new db($dbhost, $dbuser, $dbpass, $dbname);
 
 // Pull the data
-$db->query('SELECT * FROM launch_data ORDER BY date ASC');
+$db->query('SELECT * FROM launch_data WHERE date >= NOW() - INTERVAL 1 HOUR ORDER BY date ASC;');
 $launches = $db->fetchAll();
 
 if ($launches) {

@@ -19,9 +19,10 @@ $(document).ready(function() {
 
             // Check if there are any launches
             if (data.length > 0) {
-                // Loop through the launch data and build the HTML
                 let html = '';
-                $.each(data, function(index, launch) {
+                // Loop through the first 3 launches or fewer if there are less than 3
+                for (let i = 0; i < Math.min(3, data.length); i++) {
+                    const launch = data[i];
                     html += '<div class="block-item">';
                     html += '<h3>' + launch.name + '</h3>';
                     html += '<p><strong>Date:</strong> ' + launch.date + '</p>';
@@ -35,9 +36,7 @@ $(document).ready(function() {
                     html += '<p><strong>Mission Name:</strong> ' + launch.mission_name + '</p>';
                     html += '<p><strong>Mission Description:</strong> ' + launch.mission_description + '</p>';
                     html += '</div>';
-                });
-
-                // Append the HTML to the launch list div
+                }
                 $('#launch-list').append(html);
             } else {
                 // Display a message if no launches are found
