@@ -24,6 +24,7 @@ html, body {
 	font-size: 3vh;
 	overflow: hidden;
 	position:fixed;
+	text-overflow: ellipsis;
 	top:0;
 	white-space: nowrap;
 	width: 100%;
@@ -90,7 +91,7 @@ html, body {
 	color: white;
 	padding: 1vw;
 	border-radius: 5px;
-	font-size: 2em;
+	font-size: 6vw;
 	font-family:'AlarmClock';
 	opacity:0.75;
 	z-index: 10;
@@ -110,11 +111,10 @@ html, body {
 }
 
 /* Launch view */
-#launch-name {
-	display: inline-block;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+#launch-countdown {
+	font-family:'AlarmClock';
+	font-size:6vw;
+	text-align:center;
 }
 .launch-image {
 	width:25%;
