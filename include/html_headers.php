@@ -5,4 +5,5 @@
         <title><?php echo $PAGE_TITLE ?></title>
         <link rel="stylesheet" href="css/main.css">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="js/main.js"></script>
 </head>

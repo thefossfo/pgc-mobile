@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  $('#camera-icon').css('color', 'white');
   let currentStream;
   let countdownInterval;
   let scale = 2;
@@ -24,7 +25,7 @@ $(document).ready(function() {
           $.each(data, function(index, launch) {
             $('<option>')
               .val(launch.id)
-              .text(launch.name || `Launch ID: ${launch.id}`)
+              .text(`${launch.mission_name} | ${new Date(Date.parse(launch.date + ' UTC')).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit' })}` || `Launch ID: ${launch.id}`)
               .data('launchTime', launch.date)
               .appendTo($selectElement);
           });
