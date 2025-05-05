@@ -1,7 +1,7 @@
 <?php
 
 //Connect to the database
-require_once '../include/db.php';
+require_once '/var/www/html/pgc-mobile/include/db.php';
 $dbhost = '127.0.0.1';
 $dbuser = 'root';
 $dbpass = 'password';
