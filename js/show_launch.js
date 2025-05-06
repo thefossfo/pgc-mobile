@@ -133,7 +133,10 @@ $(document).ready(function () {
 						$('#launch-user').html(userHTML);
 						userDistanceInterval = setInterval(function() {
 							calcUserDistance(launch.pad_latitude, launch.pad_longitude);
-						});
+						}, 1000);
+						pointToLaunchpadInterval = setInterval(function() {
+							pointToLaunchpad(launch.pad_latitude, launch.pad_longitude);
+						}, 1000);
 
 						//Generate details data
 						detailsHTML =  '<h3>';

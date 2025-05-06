@@ -74,7 +74,7 @@ html, body {
 
 /* camera view */
 #camera-view {
-	height:auto;
+	height:100%;
 	object-fit: cover;
 	width:100%;
 }
