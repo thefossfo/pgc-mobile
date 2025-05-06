@@ -82,9 +82,67 @@ $(document).ready(function () {
 								updateCountdown(localLaunchTime.toISOString()); // Pass the adjusted local time
 							}, 1000);
 						}
-						statusHTML = '<div></div>';
-						//$('#launch-status').html(statusHTML);
-						$('#launch-details').text(launch.mission_description);
+
+						//Generate status HTML
+						//Probability needs to be in integer format
+						const statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 56 56"><path fill="currentColor" d="m50.923 21.002l.046.131l.171.566l.143.508l.061.232l.1.42a23.93 23.93 0 0 1-2.653 17.167a23.93 23.93 0 0 1-13.57 10.89l-.404.12l-.496.128l-.717.17a1.89 1.89 0 0 1-2.288-1.558a2.127 2.127 0 0 1 1.606-2.389l.577-.145q.54-.142.929-.273a19.93 19.93 0 0 0 10.899-8.943a19.93 19.93 0 0 0 2.292-13.923l-.069-.313l-.092-.365l-.115-.418l-.138-.47a2.135 2.135 0 0 1 1.26-2.602a1.894 1.894 0 0 1 2.458 1.067M7.385 19.92q.065.02.128.044A2.127 2.127 0 0 1 8.78 22.55q-.27.909-.39 1.513a19.93 19.93 0 0 0 2.295 13.91a19.93 19.93 0 0 0 10.911 8.947l.306.097l.174.05l.39.106l.694.171a2.135 2.135 0 0 1 1.623 2.393a1.894 1.894 0 0 1-2.152 1.594l-.138-.025l-.576-.135l-.51-.13l-.446-.125l-.2-.06A23.93 23.93 0 0 1 7.22 39.972a23.93 23.93 0 0 1-2.647-17.197l.077-.32l.1-.375l.194-.665l.076-.25a1.89 1.89 0 0 1 2.365-1.246M28.051 12c8.837 0 16 7.163 16 16s-7.163 16-16 16s-16-7.163-16-16s7.164-16 16-16m0 4c-6.627 0-12 5.373-12 12s5.373 12 12 12c6.628 0 12-5.373 12-12s-5.372-12-12-12m0-12a23.93 23.93 0 0 1 16.217 6.306l.239.227l.275.274l.31.322l.346.369a1.89 1.89 0 0 1-.205 2.76a2.127 2.127 0 0 1-2.873-.196q-.326-.345-.605-.617l-.35-.334l-.16-.143A19.93 19.93 0 0 0 28.051 8a19.93 19.93 0 0 0-13.204 4.976l-.114.102l-.253.24l-.287.285l-.495.515c-.76.809-2.014.9-2.883.21a1.894 1.894 0 0 1-.305-2.662l.09-.106l.405-.431l.368-.378q.262-.263.484-.465A23.93 23.93 0 0 1 28.05 4"/></svg>';
+						if (Number.isInteger(launch.probability)) {
+							statusHTML = '<h3 style="color:' + generateProbabilityColor(launch.probability) + '">' + statusIcon + ' ' + launch.probability + '% ' + launch.status + '</h3>';
+						} else {
+							statusHTML = '<h3>' + statusIcon + ' ' + launch.status + '</h3>';
+						}
+						statusHTML += '<p>';
+						statusHTML +=   '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none">';
+						statusHTML +=   '<path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path><path fill="currentColor" d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2m0 2a8 8 0 1 0 0 16a8 8 0 0 0 0-16m0 2a1 1 0 0 1 .993.883L13 7v4.586l2.707 2.707a1 1 0 0 1-1.32 1.497l-.094-.083l-3-3a1 1 0 0 1-.284-.576L11 12V7a1 1 0 0 1 1-1">i';
+						statusHTML +=   '</path></g></svg> ';
+						statusHTML +=   formatLaunchDate(launch.date);
+						statusHTML += '</p>';
+						$('#launch-status').html(statusHTML);
+
+						//Generate location data
+						locationHTML =  '<h3>';
+						locationHTML +=   '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">';
+						locationHTML +=   '<g fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2">';
+						locationHTML +=   '<path d="M13 9a1 1 0 1 1-2 0a1 1 0 0 1 2 0Z"></path>';
+						locationHTML +=   '<path d="M17.5 9.5c0 3.038-2 6.5-5.5 10.5c-3.5-4-5.5-7.462-5.5-10.5a5.5 5.5 0 1 1 11 0Z"></path>';
+						locationHTML +=   '</g></svg> ' + launch.location;
+						locationHTML += '</h3>';
+						locationHTML += '<p>';
+						locationHTML +=   '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 36 36">';
+						locationHTML +=   '<path fill="currentColor" d="M28 34H8a1 1 0 0 0 0 2h20a1 1 0 0 0 0-2M18 9.53a2.75 2.75 0 1 0 2.75 2.75A2.75 2.75 0 0 0 18 9.53m0 3.89a1.15 1.15 0 0 1 0-2.29a1.15 1.15 0 1 1 0 2.29"/>';
+						locationHTML +=   '<path fill="currentColor" d="M28.75 22.45a15.5 15.5 0 0 0-2.85-5.52l-.28-.35c0-.34 0-.68-.05-1C24.89 4.36 18.79.6 18.54.44a1 1 0 0 0-1 0c-.26.16-6.35 3.92-7 15.1c0 .32 0 .65-.05 1l-.33.41a15.6 15.6 0 0 0-3.44 11.14a1 1 0 0 0 1 .91h4.43a16.3 16.3 0 0 0 1 2.5a1 1 0 0 0 .87.51H22a1 1 0 0 0 .87-.51a16 16 0 0 0 1-2.5h4.39a1 1 0 0 0 1-.91a15.6 15.6 0 0 0-.51-5.64M21.37 30h-6.69a25.5 25.5 0 0 1-1.59-5.23l-2 .4c.14.65.28 1.25.43 1.82H8.66a13.2 13.2 0 0 1 1.8-7c0 .55.07 1.1.13 1.66l2-.21a34 34 0 0 1-.11-5.77C13 7.35 16.65 3.64 18 2.53c1.38 1.12 5.05 4.82 5.56 13.15A32.86 32.86 0 0 1 21.37 30m3.12-3a37 37 0 0 0 1.09-6.94A13.17 13.17 0 0 1 27.34 27Z"/></svg> ';
+						locationHTML +=   launch.pad_name;
+						locationHTML += '</p>';
+						$('#launch-location').html(locationHTML);
+
+						//Generate user data
+						userHTML =  '<h3>';
+						userHTML +=   '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M16 9c0 5.33-8 5.33-8 0h2c0 2.67 4 2.67 4 0m6 9v3H4v-3c0-2.67 5.33-4 8-4s8 1.33 8 4m-1.9 0c0-.64-3.13-2.1-6.1-2.1S5.9 17.36 5.9 18v1.1h12.2M12.5 2c.28 0 .5.22.5.5v3h1V3a3.89 3.89 0 0 1 2.25 3.75s.7.14.75 1.25H7c0-1.11.75-1.25.75-1.25A3.89 3.89 0 0 1 10 3v2.5h1v-3c0-.28.22-.5.5-.5"/></svg> ';
+						userHTML +=   'Operator Data (You)';
+						userHTML += '</h3>';
+						userHTML += '<p>';
+						userHTML +=   '<span id="user-distance-direction"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 2048 2048"><path fill="currentColor" d="m1024 0l683 2048l-683-683l-683 683z"></path></svg></span>';
+						userHTML +=   '<span id="user-distance-measurement"> calculating distance</span>';
+						userHTML +=   '<span id="user-distance-text"> to launchpad</span>';
+						userHTML += '</p>';
+						userHTML += '<p>';
+						userHTML +=   '<span id="user-sound-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M7 22q1.55 0 2.538-.775t1.512-2.275q.425-1.25.813-1.75t1.787-1.6q1.55-1.25 2.45-2.825T17 9q0-2.975-2.013-4.987T10 2T5.012 4.013T3 9h2q0-2.125 1.438-3.562T10 4t3.563 1.438T15 9q0 1.7-.675 2.9T12.4 14.05q-1.3.95-2.025 1.85T9.3 17.85q-.35 1.1-.838 1.625T7 20q-.825 0-1.412-.587T5 18H3q0 1.65 1.175 2.825T7 22m10.8-5.25q1.475-1.5 2.338-3.488T21 9q0-2.3-.862-4.3T17.8 1.2l-1.45 1.4q1.25 1.25 1.95 2.888T19 9q0 1.85-.7 3.475t-1.95 2.875zM10 11.5q1.05 0 1.775-.737T12.5 9q0-1.05-.725-1.775T10 6.5t-1.775.725T7.5 9q0 1.025.725 1.763T10 11.5"></path></svg></span>';
+						userHTML +=   '<span id="user-sound-measurement"> calculating time</span>';
+						userHTML +=   '<span id="user-sound-text"> to hear rocket</span>';
+						userHTML += '</p>';
+						$('#launch-user').html(userHTML);
+						userDistanceInterval = setInterval(function() {
+							calcUserDistance(launch.pad_latitude, launch.pad_longitude);
+						});
+
+						//Generate details data
+						detailsHTML =  '<h3>';
+						detailsHTML +=   '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">';
+						detailsHTML +=   '<path fill="currentColor" fill-rule="evenodd" d="M256 42.667C138.18 42.667 42.667 138.179 42.667 256c0 117.82 95.513 213.334 213.333 213.334c117.822 0 213.334-95.513 213.334-213.334S373.822 42.667 256 42.667m0 384c-94.105 0-170.666-76.561-170.666-170.667S161.894 85.334 256 85.334c94.107 0 170.667 76.56 170.667 170.666S350.107 426.667 256 426.667m26.714-256c0 15.468-11.262 26.667-26.497 26.667c-15.851 0-26.837-11.2-26.837-26.963c0-15.15 11.283-26.37 26.837-26.37c15.235 0 26.497 11.22 26.497 26.666m-48 64h42.666v128h-42.666z"/></svg> ';
+						detailsHTML +=   launch.mission_name;
+						detailsHTML += '</h3>';
+						detailsHTML += '<p>' + launch.mission_description + '</h3>';
+						$('#launch-details').html(detailsHTML);
                                         }
                                 });
 

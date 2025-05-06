@@ -20,6 +20,7 @@ html, body {
         border:1px solid #444;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 	background: #222;
+	color: #fff;
 	display:table;
 	font-size: 3vh;
 	overflow: hidden;
@@ -99,6 +100,9 @@ html, body {
 	text-align:center;
 	width:80%;
 }
+#launch-go {
+	font-weight:bold;
+}
 #launch-select {
 	background-color:#222;
 	color:inherit;
@@ -109,11 +113,34 @@ html, body {
 	z-index:500;
 	position:fixed;
 }
+#user-stats {
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 5px;
+	bottom:10vh;
+	color: #fff;
+	display: none;
+	left:5vw;
+        opacity:0.75;
+        padding: 3vw;
+	position:absolute;
+}
+#user-distance-direction {
+	display: inline-block;
+	animation: spin 2s linear infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* Launch view */
 #launch-countdown {
 	font-family:'AlarmClock';
-	font-size:6vw;
+	font-size:7vw;
 	text-align:center;
 }
 .launch-image {

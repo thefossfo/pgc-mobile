@@ -1,3 +1,6 @@
+let countdownInterval; // Declare in global scope
+let userStatsInterval; // Declare in global scope
+
 $(document).ready(function () {
     $("#camera-icon").css("color", "white");
     let currentStream;
@@ -38,6 +41,10 @@ $(document).ready(function () {
                                     `Launch ID: ${launch.id}`,
                             )
                             .data("launchTime", launch.date)
+                            .data("launchStatus", launch.status)
+                            .data("launchProbability", launch.probability)
+			    .data("launchLatitude", launch.pad_latitude)
+			    .data("launchLongitude", launch.pad_longitude)
                             .appendTo($selectElement);
                     });
                 } else {
@@ -74,25 +81,6 @@ $(document).ready(function () {
                 console.error("Error accessing back camera:", error);
                 $cameraView.html("<p>Error accessing the back camera.</p>");
             });
-    }
-
-    function updateCountdown(targetTime) {
-        const now = new Date().getTime();
-        const target = new Date(targetTime).getTime();
-        let difference = target - now;
-        if (difference <= 0) {
-            clearInterval(countdownInterval);
-            $("#countdown").text("LAUNCHED!");
-            return;
-        }
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        difference -= days * (1000 * 60 * 60 * 24);
-        const hours = Math.floor(difference / (1000 * 60 * 60));
-        difference -= hours * (1000 * 60 * 60);
-        const minutes = Math.floor(difference / (1000 * 60));
-        difference -= minutes * (1000 * 60);
-        const seconds = Math.floor(difference / 1000);
-        $("#countdown").text(`T - ${days}d ${hours}:${minutes}:${seconds}`);
     }
 
     function applyZoom() {
@@ -139,11 +127,25 @@ $(document).ready(function () {
         const selectedValue = $(this).val();
         const selectedOption = $(this).find(":selected");
         const launchTimeUTCString = selectedOption.data("launchTime");
+	const launchProbability = selectedOption.data("launchProbability");
+	const launchStatus = selectedOption.data("launchStatus");
+	const lpLat = selectedOption.data("launchLatitude");
+	const lpLong = selectedOption.data("launchLongitude");
 
+	updateLaunchStatus(launchProbability, launchStatus);
+
+        clearInterval(userStatsInterval);
+        userStatsInterval = setInterval(function() {
+		calcUserDistance(lpLat, lpLong);
+	}, 1000);
         if (selectedValue === "null") {
             $("#countdown").hide();
+            $("#user-stats").hide();
         } else {
             $("#countdown").show();
+            $("#user-stats").show();
+            $("#user-distance-measurement").text(' calculating distance');
+            $("#user-distance-direction").css('animation', 'spin 2s linear infinite');
             if (launchTimeUTCString) {
                 clearInterval(countdownInterval);
                 $("#countdown").text("LOADING COUNTDOWN...");
