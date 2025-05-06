@@ -26,8 +26,8 @@ $(document).ready(function() {
                     const launch = data[i];
                     html += '<div class="block-item block-item-table launch-item" data-id="' + launch.id + '">';
                     html += '<div class="block-item-tr">';
-                    html += '<div class="block-item-td launch-image">';
-                    html += '<img width="100%" src="' + (launch.image !== null && launch.image !== 'null' ? launch.image : 'images/no-image-available.jpg') + '">';
+                    html += '<div class="block-item-td launch-image" style="background-image: url(\'' + launch.image + '\')">';
+                    //html += '<img width="100%" src="' + (launch.image !== null && launch.image !== 'null' ? launch.image : 'images/no-image-available.jpg') + '">';
                     html += '</div>';
                     html += '<div class="block-item-td">';
                     html += '<h3>' + launch.mission_name + '</h3>';
