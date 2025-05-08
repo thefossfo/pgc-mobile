@@ -20,6 +20,22 @@ $(document).ready(function() {
 		let launchURL = `index.php?page=launch&id=${launchId}`;
 		window.location.href = launchURL;
 	});
+
+	//Event listener for copying links
+	$('.copy-link').on('click', function() {
+		var linkToCopy = $(this).data('link');
+		if (linkToCopy) {
+			copyLink(linkToCopy);
+		}
+	});
+
+	//Event listener to share links
+	$('.share-link').on('click', function() {
+		var linkToShare = $(this).data('link');
+		if (linkToShare) {
+			shareLink(linkToShare);
+		}
+	});
 });
 
 //Function to convert date string to user friendly
@@ -44,7 +60,7 @@ function formatLaunchDate(utcDateString) {
     return `Today at ${timeString}`;
   } else if (diffInDays === 1) {
     return `Tomorrow at ${timeString}`;
-  } else if (diffInDays > 1 && diffInDays < 7) {
+  } else if (diffInDays > 1 && diffInDays < 4) {
     const dayOfWeek = utcDate.toLocaleDateString(undefined, { weekday: 'long' });
     return `This ${dayOfWeek} at ${timeString}`;
   } else {
@@ -61,6 +77,27 @@ function generateProbabilityColor(pC) {
 	const green = pC > 50 ? 255 : Math.round(pC * 5.1);
 	const blue = 0;
 	return `rgb(${red},${green},${blue})`;
+}
+
+//Function to generate appropriate color based on sound delay
+function generateDelayColor(sD) {
+    const maxDelay = 600;
+
+    if (sD < 0) {
+        return `rgb(0, 255, 0)`; // Should not happen in a real scenario, but handle for safety
+    }
+
+    if (sD > maxDelay) {
+        return `rgb(255, 0, 0)`; // Maximum red beyond the threshold
+    }
+
+    const normalizedDelay = sD / maxDelay; // Value between 0 and 1
+
+    const red = Math.round(normalizedDelay * 255);   // Closer to maxDelay, more red
+    const green = Math.round((1 - normalizedDelay) * 255); // Closer to 0s, more green
+    const blue = 0;
+
+    return `rgb(${red}, ${green}, ${blue})`;
 }
 
 //Get user's GPS data and store it in global scope
@@ -90,6 +127,7 @@ function calcSoundTravelTime(distanceInMeters) {
         }
         const speedOfSound = 343.0;
         const travelTimeInSeconds = (distanceInMeters / speedOfSound).toFixed(0);
+	$("#user-sound-measurement").parent().css('color', generateDelayColor(travelTimeInSeconds));
         $("#user-sound-measurement").text(' ' + travelTimeInSeconds + ' seconds');
 }
 
@@ -204,4 +242,57 @@ function toRadians(degrees) {
 // Helper function to convert radians to degrees
 function toDegrees(radians) {
   return radians * 180 / Math.PI;
+}
+
+//Function to copy url to clipboard
+function copyLink(link) {
+  var link = decodeURIComponent(link);
+  navigator.clipboard.writeText(link)
+    .then(() => {
+      console.log('Link copied to clipboard!');
+      showMessage('Copied to clipboard!');
+    })
+    .catch(err => {
+      console.error('Failed to copy link: ', err);
+      showMessage('Failed to copy to clipboard!');
+    });
+}
+
+//Function to share a link
+function shareLink(link) {
+	window.open(link, '_blank');
+}
+
+//Function to display a message that fades away
+function showMessage(message) {
+  // Create a div for the message
+  var messageDiv = $('<div class="copy-message"></div>');
+  messageDiv.text(message);
+
+  // Style the message
+  messageDiv.css({
+    position: 'fixed',
+    top: '20px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    backgroundColor: 'rgba(0, 128, 0, 0.8)', // Green with opacity
+    color: 'white',
+    padding: '10px 20px',
+    borderRadius: '5px',
+    zIndex: 1000, // Ensure it's on top of everything
+    opacity: 1,      // Start with full opacity
+    transition: 'opacity 0.5s ease-in-out, top 0.5s ease-in-out' // Smooth transition
+  });
+
+  // Append the message to the body
+  $('body').append(messageDiv);
+
+  // Animate the message
+  setTimeout(function() {
+    messageDiv.css('opacity', 0); // Fade out
+    messageDiv.css('top', '0px');    // Move up
+    setTimeout(function() {
+      messageDiv.remove(); // Remove the element after the animation
+    }, 500); // 500ms matches the opacity transition
+  }, 1500); // Display for 1.5 seconds
 }

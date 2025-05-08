@@ -122,7 +122,7 @@ foreach ($launches as $launch) {
         }
     } else {
         // Launch ID doesn't exist, so insert a new record
-        $inserted = $db->query("INSERT INTO launch_data (id, name, date, status, window_start, window_end, probability, location, pad_name, pad_latitude, pad_longitude, rocket_name, mission_name, mission_description)
+        $inserted = $db->query("INSERT INTO launch_data (id, name, date, status, window_start, window_end, probability, location, pad_name, pad_latitude, pad_longitude, rocket_name, mission_name, mission_description, image)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
             $id,
             $name,
@@ -137,7 +137,8 @@ foreach ($launches as $launch) {
             $pad_longitude,
             $rocket_name,
             $mission_name,
-            $mission_description
+	    $mission_description,
+	    $image
         ]);
 
         if ($inserted) {
