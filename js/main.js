@@ -1,6 +1,20 @@
 //If a function is used more than once, it goes in main.js
 //If it's only used once on one page, put it in <page>.js
 $(document).ready(function() {
+	//Initiate service worker for mobile app
+	if ('serviceWorker' in navigator) {
+	  window.addEventListener('load', () => {
+	    navigator.serviceWorker.register('/pgc-mobile/js/service-worker.js') // Adjust the path if your service-worker.js is in a different location
+	      .then((registration) => {
+		console.log('Service worker registered: ', registration);
+	      })
+	      .catch((error) => {
+		console.log('Service worker registration failed: ', error);
+	      });
+	  });
+	}
+
+	//Event listener for selecting a launch item
 	$('#launch-list').on('click', '.launch-item', function() {
 		let launchId = $(this).data('id');
 		let launchURL = `index.php?page=launch&id=${launchId}`;

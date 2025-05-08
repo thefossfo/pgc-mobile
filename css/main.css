@@ -38,7 +38,7 @@ html, body {
 	vertical-align:middle;
 }
 #header-spacer {
-	height:5vh;
+	height:5.5vh;
 }
 
 /* Bottom menu */
@@ -156,7 +156,7 @@ html, body {
 .block-item {
 	background-color: #121212;
 	border: 1px solid #444;
-	border-radius: 4px;
+	border-radius: 2vw;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 	color: #fff;
 	font-size:4vw;
@@ -177,6 +177,9 @@ html, body {
 .info {
 	background-color:#02043b !important;
 	font-weight:bold;
+}
+.blue-link {
+	color: #4f70a8;
 }
 .white-link {
 	color: #ddd;

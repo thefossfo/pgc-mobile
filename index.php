@@ -16,21 +16,24 @@ $PAGE_LIST = array(
 	"SELECT",
 	"LAUNCH",
 	"CAMERA",
-	"SETTINGS"
+	"SETTINGS",
+	"HOW-TO-INSTALL"
 );
 $PAGE_SRC = array(
 	"include/home.php",
 	"include/select_launch.php",
 	"include/show_launch.php",
 	"include/camera.php",
-	"include/settings.php"
+	"include/settings.php",
+	"include/how_to_install.php"
 );
 $PAGE_TITLES = array(
 	"Home",
 	"Select a launch",
 	"Launch details",
 	"Camera view",
-	"Settings"
+	"Settings",
+	"How to install PGC as an app"
 );
 for ($p=0;$p<count($PAGE_LIST);$p++) {
         if ($PAGE_LIST[$p]==$PAGE) {
