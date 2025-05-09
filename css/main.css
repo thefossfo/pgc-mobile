@@ -108,7 +108,7 @@ html, body {
 	background-color:#121212;
 	color:inherit;
 	font-family:inherit;
-	height:3vh;
+	font-size:2vh;
 	margin-top:6vh;
 	width:100%;
 	z-index:500;

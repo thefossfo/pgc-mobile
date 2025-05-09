@@ -45,7 +45,7 @@ $page_html .=				'<td id="countdown-table-hours">00</td>';
 $page_html .=				'<td>:</td>';
 $page_html .=				'<td id="countdown-table-minutes">00<td>';
 $page_html .=				'<td>:</td>';
-$page_html .=				'<td id="countdown-table-seconds"">00<td>';
+$page_html .=				'<td id="countdown-table-seconds">00<td>';
 $page_html .=			'</tr>';
 $page_html .=			'<tr class="countdown-table-footers">';
 $page_html .=				'<td></td>';

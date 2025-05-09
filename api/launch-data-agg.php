@@ -1,5 +1,6 @@
 <?php
 
+//Aggregrate date for upcoming launches from the space devs launch library "launch/upcoming" endpoint
 //Connect to the database
 require_once '/var/www/html/pgc-mobile/include/db.php';
 $dbhost = '127.0.0.1';

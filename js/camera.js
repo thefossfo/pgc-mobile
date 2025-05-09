@@ -14,6 +14,7 @@ $(document).ready(function () {
   let initialZoomLevel; // To store the zoom level at the start of a pinch
   let currentZoom = 1.5; // Initialize current zoom level
 
+  //Pull list of launches and display in a dropdown
   function fetchLaunches(selectElementId) {
     const $selectElement = $("#" + selectElementId);
     if (!$selectElement.length) {
@@ -50,6 +51,11 @@ $(document).ready(function () {
               .data("launchLongitude", launch.pad_longitude)
               .appendTo($selectElement);
           });
+          //If launch id is passed in url, display that launch
+          const launchId = getQueryParam(currentUrl, "id");
+          if (launchId) {
+		$("#launch-select").val(launchId).change();
+	  }
         } else {
           $("<option>")
             .text("No launches available")

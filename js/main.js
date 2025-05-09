@@ -296,3 +296,41 @@ function showMessage(message) {
     }, 500); // 500ms matches the opacity transition
   }, 1500); // Display for 1.5 seconds
 }
+
+// Function to extract the value of a specific query parameter from the URL
+// Get the current URL
+let currentUrl = window.location.href;
+function getQueryParam(url, param) {
+	const name = param.replace(/[\[\]]/g, "\\$&");
+	const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+	const results = regex.exec(url);
+	if (!results) return null;
+	if (!results[2]) return "";
+	return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+//Function to change pointer to finger for live demos
+function isDemo() {
+    if (getQueryParam(currentUrl, 'demo') === 'true') {
+        isDemoMode = true;
+        // Set the initial 'up' finger cursor
+        $('body').css('cursor', 'url("images/finger_up.png"), pointer');
+
+        // Function to change the cursor to the 'down' finger
+        function setFingerDownCursor() {
+            $('body').css('cursor', 'url("images/finger_down.png"), pointer');
+        }
+
+        // Function to change the cursor back to the 'up' finger
+        function setFingerUpCursor() {
+            $('body').css('cursor', 'url("images/finger_up.png"), pointer');
+        }
+
+        // Event listeners to simulate the click
+        $('body').on('mousedown', setFingerDownCursor);
+        $('body').on('mouseup mouseleave', setFingerUpCursor);
+    } else {
+        // Revert to the default cursor if demo mode is not active
+        $('body').css('cursor', 'default');
+    }
+}

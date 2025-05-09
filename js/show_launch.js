@@ -31,16 +31,6 @@ $(document).ready(function () {
         // Construct the API URL
         const apiUrl = baseUrl + "api/api.php";
 
-        // Function to extract the value of a specific query parameter from the URL
-        function getQueryParam(url, param) {
-                const name = param.replace(/[\[\]]/g, "\\$&");
-                const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
-                const results = regex.exec(url);
-                if (!results) return null;
-                if (!results[2]) return "";
-                return decodeURIComponent(results[2].replace(/\+/g, " "));
-        }
-
         // Extract the launch ID from the URL
         const launchId = getQueryParam(currentUrl, "id");
 
@@ -130,6 +120,12 @@ $(document).ready(function () {
 						userHTML +=   '<span id="user-sound-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M7 22q1.55 0 2.538-.775t1.512-2.275q.425-1.25.813-1.75t1.787-1.6q1.55-1.25 2.45-2.825T17 9q0-2.975-2.013-4.987T10 2T5.012 4.013T3 9h2q0-2.125 1.438-3.562T10 4t3.563 1.438T15 9q0 1.7-.675 2.9T12.4 14.05q-1.3.95-2.025 1.85T9.3 17.85q-.35 1.1-.838 1.625T7 20q-.825 0-1.412-.587T5 18H3q0 1.65 1.175 2.825T7 22m10.8-5.25q1.475-1.5 2.338-3.488T21 9q0-2.3-.862-4.3T17.8 1.2l-1.45 1.4q1.25 1.25 1.95 2.888T19 9q0 1.85-.7 3.475t-1.95 2.875zM10 11.5q1.05 0 1.775-.737T12.5 9q0-1.05-.725-1.775T10 6.5t-1.775.725T7.5 9q0 1.025.725 1.763T10 11.5"></path></svg></span>';
 						userHTML +=   '<span id="user-sound-measurement"> calculating time</span>';
 						userHTML +=   '<span id="user-sound-text"> to hear rocket</span>';
+						userHTML += '</p>';
+						userHTML += '<p>';
+						userHTML +=   '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.5h-1.28l-.32-1a3 3 0 0 0-2.84-2H9.44A3 3 0 0 0 6.6 5.55l-.32 1H5a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3.05m1 11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h2a1 1 0 0 0 1-.68l.54-1.64a1 1 0 0 1 .95-.68h5.12a1 1 0 0 1 .95.68l.54 1.64a1 1 0 0 0 .9.68h2a1 1 0 0 1 1 1Zm-8-9a4 4 0 1 0 4 4a4 4 0 0 0-4-4m0 6a2 2 0 1 1 2-2a2 2 0 0 1-2 2"></path></svg> ';
+						userHTML +=   '<a class="white-link" href="index.php?page=camera&id=' + launch.id + '">';
+						userHTML +=     'Open in camera view';
+						userHTML +=   '</a>';
 						userHTML += '</p>';
 						$('#launch-user').html(userHTML);
 						userDistanceInterval = setInterval(function() {
