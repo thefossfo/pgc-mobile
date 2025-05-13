@@ -114,6 +114,12 @@ html, body {
 	z-index:500;
 	position:fixed;
 }
+#launchpad-compass {
+	left:50%;
+	position:absolute;
+	top:50%;
+	transform: translate(-50%, -50%);
+}
 #user-stats {
         background-color: rgba(0, 0, 0, 0.7);
         border-radius: 5px;
@@ -177,6 +183,12 @@ html, body {
 .center {
 	text-align:center;
 }
+.right {
+	text-align:right;
+}
+.vertical {
+	vertical-align:center;
+}
 .countdown-table {
 	color:inherit;
 	font-family:inherit;
@@ -196,4 +208,27 @@ html, body {
 }
 .white-link {
 	color: #ddd;
+}
+/* radio slider buttons */
+.radio-slider {
+    flex-grow: 1;
+}
+.radio-slider input[type=radio] {
+    display: none;
+}
+.radio-slider input[type=radio]:checked + label {
+    background-color:#121299;
+}
+.radio-slider label {
+    display: block;
+    padding: 6px 8px;
+    font-weight: bold;
+    text-align: center;
+    transition : all .4s 0s ease;
+}
+.radio-slider-wrapper {
+    background: #333;
+    border-radius:2vw;
+    display: flex;
+    overflow: hidden;
 }

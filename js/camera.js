@@ -192,7 +192,7 @@ $(document).ready(function () {
     } else {
       $("#countdown").show();
       $("#user-stats").show();
-      $("#user-distance-measurement").text(" calculating distance");
+      $("#user-distance-measurement").text(" calculating distance/direction");
       $("#user-distance-direction").css("animation", "spin 2s linear infinite");
       if (launchTimeUTCString) {
         clearInterval(countdownInterval);

@@ -162,78 +162,6 @@ function calcUserDistance(lpLat, lpLong) {
         }
 }
 
-//Function to point arrow towards launch pad
-function pointToLaunchpad(lpLat, lpLong) {
-  if (typeof userLatitude === 'undefined' || typeof userLongitude === 'undefined') {
-    return;
-  }
-
-  const userLat = userLatitude;
-  const userLng = userLongitude;
-
-  const targetLat = lpLat;
-  const targetLng = lpLong;
-
-  // Calculate bearing (initial direction from user to target)
-  const lat1 = toRadians(userLat);
-  const lon1 = toRadians(userLng);
-  const lat2 = toRadians(targetLat);
-  const lon2 = toRadians(targetLng);
-
-  const deltaLon = lon2 - lon1;
-
-  let y = Math.sin(deltaLon) * Math.cos(lat2);
-  let x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(deltaLon);
-
-  let initialBearing = toDegrees(Math.atan2(y, x));
-  initialBearing = (initialBearing + 360) % 360; // Normalize to 0-360 degrees
-
-  // Function to handle device orientation changes
-  function handleOrientation(event) {
-    let heading;
-
-    // Check for different orientation event properties
-    if (event.alpha !== null) {
-      // Most common case: compass heading relative to magnetic north
-      heading = event.alpha;
-    } else if (event.webkitCompassHeading) {
-      // Safari-specific property
-      heading = event.webkitCompassHeading;
-    } else {
-      console.error("Compass data not available on this device.");
-      window.removeEventListener('deviceorientation', handleOrientation);
-      return;
-    }
-
-    // Calculate the difference between the initial bearing and the device heading
-    let rotation = initialBearing - heading;
-
-    // Normalize the rotation to -180 to 180 degrees for smoother animation
-    rotation = (rotation + 360) % 360;
-    if (rotation > 180) {
-      rotation -= 360;
-    }
-	  
-    // Check if the rotation is within the target range
-    if (rotation >= -5 && rotation <= 5) {
-      $('#user-distance-direction').css('color', 'red');
-    } else {
-      $('#user-distance-direction').css('color', 'inherit');
-    }
-
-    // Apply the rotation to the arrow using CSS transform
-	   console.log(rotation);
-    $('#user-distance-direction').css('transform', `rotate(${rotation}deg)`);
-  }
-
-  // Add event listener for device orientation
-  if (window.DeviceOrientationEvent) {
-    window.addEventListener('deviceorientation', handleOrientation);
-  } else {
-    console.error("Device Orientation API not supported on this device.");
-  }
-}
-
 // Helper function to convert degrees to radians
 function toRadians(degrees) {
   return degrees * Math.PI / 180;
@@ -333,4 +261,13 @@ function isDemo() {
         // Revert to the default cursor if demo mode is not active
         $('body').css('cursor', 'default');
     }
+}
+
+// Helper Functions
+function toRadians(degrees) {
+  return degrees * Math.PI / 180;
+}
+
+function toDegrees(radians) {
+  return radians * 180 / Math.PI;
 }
