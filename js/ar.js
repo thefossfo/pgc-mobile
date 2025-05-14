@@ -4,9 +4,16 @@ function updateCountdown(targetTime) {
 	const target = new Date(targetTime).getTime();
 	let difference = target - now;
 	if (difference <= 0) {
-		clearInterval(countdownInterval);
 		$("#countdown").text("LAUNCHED!");
 		return;
+	}
+	//Display visual cue 5 seconds before timeToHearSound
+	if (Math.abs(difference) <= (timeToHearSound - 5)) {
+		$("#sound-cue").show();
+	}
+	if (Math.abs(difference) <= timeToHearSound) {
+		clearInterval(countdownInterval);
+		$("#sound-cue").hide();
 	}
 	const days = Math.floor(difference / (1000 * 60 * 60 * 24));
 	difference -= days * (1000 * 60 * 60 * 24);

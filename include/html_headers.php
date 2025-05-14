@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
         <meta charset="utf-8">
@@ -11,6 +12,7 @@
 	<link rel="manifest" href="favicon/site.webmanifest" />
         <link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
 	<script src="js/main.js"></script>

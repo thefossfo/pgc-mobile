@@ -104,7 +104,16 @@ $(document).ready(function () {
 						locationHTML +=   '<path fill="currentColor" d="M28.75 22.45a15.5 15.5 0 0 0-2.85-5.52l-.28-.35c0-.34 0-.68-.05-1C24.89 4.36 18.79.6 18.54.44a1 1 0 0 0-1 0c-.26.16-6.35 3.92-7 15.1c0 .32 0 .65-.05 1l-.33.41a15.6 15.6 0 0 0-3.44 11.14a1 1 0 0 0 1 .91h4.43a16.3 16.3 0 0 0 1 2.5a1 1 0 0 0 .87.51H22a1 1 0 0 0 .87-.51a16 16 0 0 0 1-2.5h4.39a1 1 0 0 0 1-.91a15.6 15.6 0 0 0-.51-5.64M21.37 30h-6.69a25.5 25.5 0 0 1-1.59-5.23l-2 .4c.14.65.28 1.25.43 1.82H8.66a13.2 13.2 0 0 1 1.8-7c0 .55.07 1.1.13 1.66l2-.21a34 34 0 0 1-.11-5.77C13 7.35 16.65 3.64 18 2.53c1.38 1.12 5.05 4.82 5.56 13.15A32.86 32.86 0 0 1 21.37 30m3.12-3a37 37 0 0 0 1.09-6.94A13.17 13.17 0 0 1 27.34 27Z"/></svg> ';
 						locationHTML +=   launch.pad_name;
 						locationHTML += '</p>';
+						locationHTML += '<p>';
+						locationHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22a5.5 5.5 0 0 0 3.439-9.793a1.11 1.11 0 0 1-.439-.86V5a3 3 0 1 0-6 0v6.348c0 .338-.175.648-.439.86A5.5 5.5 0 0 0 12 22Z"/><path d="M14.5 16.5a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 5 0Z"/><path stroke-linecap="round" d="M12 14V5"/></g></svg> ';
+						locationHTML +=   '<span id="weather-temperature">Loading temperature...</span>';
+						locationHTML += '</p>';
+						locationHTML += '<p>';
+						locationHTML +=   '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M3 8h2m2-2.143V5.5A2.5 2.5 0 1 1 9.5 8H8m-4 6h1m10 3v.5a3.5 3.5 0 1 0 3.5-3.5H9m-7-3h6m7-3v-.5a3.5 3.5 0 1 1 3.5 3.5h-6.25"/></svg> ';
+						locationHTML +=   '<span id="weather-windspeed">Loading windspeed...</span>';
+						locationHTML += '</p>';
 						$('#launch-location').html(locationHTML);
+						fetchWeatherData(launch.pad_latitude, launch.pad_longitude);
 
 						//Generate user data
 						userHTML =  '<h3>';
@@ -128,12 +137,16 @@ $(document).ready(function () {
 						userHTML +=     'Open in camera view';
 						userHTML +=   '</a>';
 						userHTML += '</p>';
+						userHTML += '<p id="user-map">Loading map...</p>';
 						$('#launch-user').html(userHTML);
 						userDistanceInterval = setInterval(function() {
 							calcUserDistance(launch.pad_latitude, launch.pad_longitude);
 						}, 1000);
 						pointToLaunchpadInterval = setInterval(function() {
 							pointToLaunchpad(launch.pad_latitude, launch.pad_longitude);
+						}, 100);
+						drawUserMapInterval = setInterval(function() {
+							drawUserMap(launch.pad_latitude,launch.pad_longitude);
 						}, 100);
 
 						//Generate details data
@@ -142,7 +155,7 @@ $(document).ready(function () {
 						detailsHTML +=   '<path fill="currentColor" fill-rule="evenodd" d="M256 42.667C138.18 42.667 42.667 138.179 42.667 256c0 117.82 95.513 213.334 213.333 213.334c117.822 0 213.334-95.513 213.334-213.334S373.822 42.667 256 42.667m0 384c-94.105 0-170.666-76.561-170.666-170.667S161.894 85.334 256 85.334c94.107 0 170.667 76.56 170.667 170.666S350.107 426.667 256 426.667m26.714-256c0 15.468-11.262 26.667-26.497 26.667c-15.851 0-26.837-11.2-26.837-26.963c0-15.15 11.283-26.37 26.837-26.37c15.235 0 26.497 11.22 26.497 26.666m-48 64h42.666v128h-42.666z"/></svg> ';
 						detailsHTML +=   launch.mission_name;
 						detailsHTML += '</h3>';
-						detailsHTML += '<p>' + launch.mission_description + '</h3>';
+						detailsHTML += '<p>' + launch.mission_description + '</p>';
 						$('#launch-details').html(detailsHTML);
 
 						//Generate rocket data
@@ -150,6 +163,10 @@ $(document).ready(function () {
 						rocketHTML +=   '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256"><g fill="currentColor"><path d="m94.81 192l-29.45 22.24a8 8 0 0 1-12.81-4.51L40.19 154.1a8 8 0 0 1 1.66-6.86l30.31-36.33C71 134.25 76.7 161.43 94.81 192m119.34-44.76l-30.31-36.33c1.21 23.34-4.54 50.52-22.65 81.09l29.45 22.24a8 8 0 0 0 12.81-4.51l12.36-55.63a8 8 0 0 0-1.66-6.86" opacity="0.2"></path><path d="M152 224a8 8 0 0 1-8 8h-32a8 8 0 0 1 0-16h32a8 8 0 0 1 8 8m-24-112a12 12 0 1 0-12-12a12 12 0 0 0 12 12m95.62 43.83l-12.36 55.63a16 16 0 0 1-25.51 9.11L158.51 200h-61l-27.26 20.57a16 16 0 0 1-25.51-9.11l-12.36-55.63a16.09 16.09 0 0 1 3.32-13.71l28.56-34.26a123 123 0 0 1 8.57-36.67c12.9-32.34 36-52.63 45.37-59.85a16 16 0 0 1 19.6 0c9.34 7.22 32.47 27.51 45.37 59.85a123 123 0 0 1 8.57 36.67l28.56 34.26a16.09 16.09 0 0 1 3.32 13.71M99.43 184h57.14c21.12-37.54 25.07-73.48 11.74-106.88C156.55 47.64 134.49 29 128 24c-6.51 5-28.57 23.64-40.33 53.12c-13.31 33.4-9.36 69.34 11.76 106.88m-15 5.85q-16.15-29.35-19.6-57.69L48 152.36L60.36 208l.18-.13ZM208 152.36l-16.83-20.2q-3.42 28.28-19.56 57.69l23.85 18l.18.13Z"></path></g></svg> ';
 						rocketHTML +=   launch.rocket_name;
 						rocketHTML += '</h3>';
+						rocketHTML += '<p>';
+						rocketHTML += '';
+						rocketHTML += launch.rocket_full_name;
+						rocketHTML += '<p>';
 						$('#launch-rocket').html(rocketHTML);
                                         }
                                 });
@@ -172,3 +189,38 @@ $(document).ready(function () {
                 },
         });
 });
+
+//Function to draw the user map relative to their location and the launchpad
+function drawUserMap(lpLat, lpLon) {
+	//Check to see if user's location has loaded yet
+	if (userLatitude && userLongitude) {
+		clearTimeout(drawUserMapInterval);
+		const currentLatitude = Number(userLatitude);
+		const currentLongitude = Number(userLongitude);
+		const launchPadLatitude = Number(lpLat);
+		const launchPadLongitude = Number(lpLon);
+
+		//Define map
+		var map = L.map('user-map').setView([(currentLatitude + currentLongitude) / 2, (launchPadLatitude + launchPadLongitude) / 2], 8);
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		tileSize: 512,
+		zoomOffset: -1
+		}).addTo(map);
+
+		//Define points
+		var currentLocation = [currentLatitude, currentLongitude];
+		var launchPadLocation = [launchPadLatitude, launchPadLongitude];
+
+		//Draw line between 2 points
+		var polyline = L.polyline([currentLocation, launchPadLocation], { color: '#121299', weight: 3 }).addTo(map);
+
+		//Add markers
+		L.marker(currentLocation).addTo(map).bindPopup("You");
+		L.marker(launchPadLocation).addTo(map).bindPopup("Launch Pad");
+
+		//Zoom map to fit everything
+		var bounds = new L.LatLngBounds([currentLocation, launchPadLocation]);
+		map.fitBounds(bounds, { padding: [20, 20] });
+	}
+}

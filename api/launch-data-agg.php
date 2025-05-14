@@ -75,6 +75,7 @@ foreach ($launches as $launch) {
     $pad_latitude = isset($launch['pad']['latitude']) ? floatval($launch['pad']['latitude']) : null;
     $pad_longitude = isset($launch['pad']['longitude']) ? floatval($launch['pad']['longitude']) : null;
     $rocket_name = isset($launch['rocket']['configuration']['name']) ? $db->escapeString($launch['rocket']['configuration']['name']) : null;
+    $rocket_full_name = isset($launch['rocket']['configuration']['full_name']) ? $db->escapeString($launch['rocket']['configuration']['full_name']) : null;
     $mission_name = isset($launch['mission']['name']) ? $db->escapeString($launch['mission']['name']) : null;
     $mission_description = isset($launch['mission']['description']) ? $db->escapeString($launch['mission']['description']) : null;
     $image = $db->escapeString($launch['image']);
@@ -95,8 +96,9 @@ foreach ($launches as $launch) {
             pad_latitude = ?,
             pad_longitude = ?,
             rocket_name = ?,
+            rocket_full_name = ?,
             mission_name = ?,
-	    mission_description = ?,
+	        mission_description = ?,
             image = ?
             WHERE id = ?", [
                 $name,
@@ -110,9 +112,10 @@ foreach ($launches as $launch) {
                 $pad_latitude,
                 $pad_longitude,
                 $rocket_name,
+                $rocket_full_name,
                 $mission_name,
                 $mission_description,
-		$image,
+		        $image,
                 $id
             ]);
 
@@ -124,7 +127,7 @@ foreach ($launches as $launch) {
     } else {
         // Launch ID doesn't exist, so insert a new record
         $inserted = $db->query("INSERT INTO launch_data (id, name, date, status, window_start, window_end, probability, location, pad_name, pad_latitude, pad_longitude, rocket_name, mission_name, mission_description, image)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
             $id,
             $name,
             $date,
@@ -137,9 +140,10 @@ foreach ($launches as $launch) {
             $pad_latitude,
             $pad_longitude,
             $rocket_name,
+            $rocket_full_name,
             $mission_name,
-	    $mission_description,
-	    $image
+	        $mission_description,
+	        $image
         ]);
 
         if ($inserted) {

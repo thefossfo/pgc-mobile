@@ -55,7 +55,7 @@ html, body {
 	padding:1vh;
 	bottom: 0;
 	width: 100%;
-	z-index:500;
+	z-index:9999;
 }
 .bottom-menu-item {
 	width:25%;
@@ -69,7 +69,7 @@ html, body {
 	text-decoration: none;
 }
 #footer-spacer {
-	height:7vh;
+	height:8vh;
 }
 
 /* camera view */
@@ -143,6 +143,24 @@ html, body {
     transform: rotate(360deg);
   }
 }
+#sound-cue {
+	color: green;
+	display:none;
+	font-size:30vw;
+        left:50%;
+        position:absolute;
+        top:50%;
+        transform: translate(-50%, -50%);
+	animation: pulse 0.5s infinite alternate;
+}
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1); /* Start at original size */
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1); /* Grow slightly */
+  }
+}
 
 /* Launch view */
 #launch-countdown {
@@ -156,6 +174,9 @@ html, body {
 	background-position: center;
 	width:25%;
 	vertical-align:middle;
+}
+#user-map {
+	height:20vh;
 }
 
 /* Generic classes */

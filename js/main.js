@@ -121,14 +121,15 @@ function getUserLocation() {
 }
 
 //Function to calculate sound travel time given a distance
+let timeToHearSound;
 function calcSoundTravelTime(distanceInMeters) {
         if (distanceInMeters < 0) {
                 return null;
         }
         const speedOfSound = 343.0;
-        const travelTimeInSeconds = (distanceInMeters / speedOfSound).toFixed(0);
-	$("#user-sound-measurement").parent().css('color', generateDelayColor(travelTimeInSeconds));
-        $("#user-sound-measurement").text(' ' + travelTimeInSeconds + ' seconds');
+        timeToHearSound = (distanceInMeters / speedOfSound).toFixed(0);
+	$("#user-sound-measurement").parent().css('color', generateDelayColor(timeToHearSound));
+        $("#user-sound-measurement").text(' ' + timeToHearSound + ' seconds');
 }
 
 //Calculate user distance to launchpad using haversine formula
@@ -270,4 +271,34 @@ function toRadians(degrees) {
 
 function toDegrees(radians) {
   return radians * 180 / Math.PI;
+}
+
+//Function to grab weather data
+function fetchWeatherData(lat, lon) {
+	const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
+	const kmhToMph = 0.621371;
+
+	//Fetch the data
+	$.ajax({
+		url: apiUrl,
+		method: 'GET',
+		dataType: 'json'
+	})
+	.then(function(data) {
+		console.log(data);
+		if (data.current_weather) {
+			//Temperature
+			if (data.current_weather.temperature !== undefined) {
+				const temperature = ((data.current_weather.temperature * 9/5) + 32).toFixed(2);
+				$('#weather-temperature').html(temperature + "&deg; F");
+			}
+			//Windspeed
+			if (data.current_weather.windspeed !== undefined) {
+				const windSpeedMph = (data.current_weather.windspeed * kmhToMph).toFixed(2);
+				const windDirection = data.current_weather.winddirection;
+				let windDirectionImg = '<svg style="transform:rotate('+windDirection+'deg)" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M12 20.5a.5.5 0 0 1-1 0V4.7l-6.15 6.15a.5.5 0 0 1-.707-.707l7-7a.5.5 0 0 1 .707 0l7 7a.5.5 0 0 1-.707.707l-6.15-6.15v15.8z"/></svg>';
+				$('#weather-windspeed').html(windSpeedMph + " mph "+windDirectionImg);
+			}
+		}
+	})
 }
