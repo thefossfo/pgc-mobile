@@ -98,7 +98,7 @@ foreach ($launches as $launch) {
             rocket_name = ?,
             rocket_full_name = ?,
             mission_name = ?,
-	        mission_description = ?,
+            mission_description = ?,
             image = ?
             WHERE id = ?", [
                 $name,
@@ -115,7 +115,7 @@ foreach ($launches as $launch) {
                 $rocket_full_name,
                 $mission_name,
                 $mission_description,
-		        $image,
+                $image,
                 $id
             ]);
 
@@ -126,8 +126,8 @@ foreach ($launches as $launch) {
         }
     } else {
         // Launch ID doesn't exist, so insert a new record
-        $inserted = $db->query("INSERT INTO launch_data (id, name, date, status, window_start, window_end, probability, location, pad_name, pad_latitude, pad_longitude, rocket_name, mission_name, mission_description, image)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [
+        $inserted = $db->query("INSERT INTO launch_data (id, name, date, status, window_start, window_end, probability, location, pad_name, pad_latitude, pad_longitude, rocket_name, rocket_full_name, mission_name, mission_description, image)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [ // Corrected to 16 '?'
             $id,
             $name,
             $date,
@@ -142,8 +142,8 @@ foreach ($launches as $launch) {
             $rocket_name,
             $rocket_full_name,
             $mission_name,
-	        $mission_description,
-	        $image
+            $mission_description,
+            $image
         ]);
 
         if ($inserted) {

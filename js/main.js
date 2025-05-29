@@ -153,7 +153,7 @@ function calcUserDistance(lpLat, lpLong) {
                 const milesPerMeter = 0.000621371;
                 const distanceInMiles = (distanceInMeters * milesPerMeter).toFixed(2);
 
-                //Update AR display of user distance
+                //Update display of user distance
                 $("#user-distance-measurement").text(' ' + distanceInMiles + ' miles');
 
                 //Now that distance is known, calculate sound travel time

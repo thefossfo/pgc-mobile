@@ -8,6 +8,7 @@ function pointToLaunchpad(lpLat, lpLong) {
 	const launchPadBearing = getBearing(lpLat, lpLong);
 	let launchPadBearingNormalized = launchPadBearing % 360;
 	launchPadBearingNormalized = launchPadBearingNormalized > 180 ? launchPadBearingNormalized - 360 : (launchPadBearingNormalized <= -180 ? launchPadBearingNormalized + 360 : launchPadBearingNormalized);
+	launchPadBearingNormalized = (launchPadBearingNormalized % 360 + 360) % 360;
 
 	if (launchPadBearing) {
 	//Rotate miles to launchpad arrow to launch pad bearing
