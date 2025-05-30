@@ -1,5 +1,7 @@
 //Define heading in global scope
 let compassHeading = null;
+let compassHeadingIndex = [];
+let compassHeadingAverage = null;
 getHeading();
 
 //Function to point arrow towards launch pad
@@ -82,6 +84,16 @@ function getHeading() {
         // console.log("Corrected Compass Heading (alpha): ", compassHeading);
       }
     });
+    //Smooth compass heading by getting average of last 5 readings
+    compassHeadingIndex.push(compassHeading);
+    if (compassHeadingIndex.length > 5) {
+	compassHeadingIndex.shift();
+    }
+    for (let i = 0; i < compassHeadingIndex.length; i++) {
+	readingsSum += compassHeadingIndex[i];
+    }
+    compassHeadingAverage = compassHeadingIndex.length > 0 ? readingsSum / compassHeadingIndex.length : 0;
+    compassHeading = compassHeadingAverage;
   } else {
     alert('Compass not supported');
   }
