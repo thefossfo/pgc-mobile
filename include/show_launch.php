@@ -60,7 +60,6 @@ $page_html .=	'<div id="launch-user" class="block-item">Loading user data...</di
 $page_html .=	'<div id="launch-details" class="block-item">Loading mission details...</div>';
 $page_html .=	'<div id="launch-rocket" class="block-item">Loading rocket details...</div>';
 $page_html .= '</div>';
-//$page_html .= '<div id="user-map"></div>';
 $page_html .= '<div id="footer-spacer"></div>';
 $page_html .= '<script src="js/show_launch.js"></script>';
 $page_html .= '<script src="js/compass.js"></script>';

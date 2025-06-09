@@ -39,33 +39,79 @@ $(document).ready(function() {
 });
 
 //Function to convert date string to user friendly
-function formatLaunchDate(utcDateString) {
-  const utcDate = new Date(utcDateString + ' UTC');
+//Function to convert date string to user friendly
+function formatLaunchDate(utcDateString, netPrecision) {
+  const utcDate = new Date(utcDateString + 'Z'); // Always parse as UTC
+  //net precision is used when not exact date
+  if (netPrecision !== undefined) {
+    const year = utcDate.getUTCFullYear();
+    const month = utcDate.toLocaleDateString('en-US', { month: 'long' });
+    switch(netPrecision) {
+      case 7:
+        return `NET ${month} ${year}`;
+      case 8:
+        return `NET 1st quarter ${year}`;
+      case 9:
+        return `NET 2nd quarter ${year}`;
+      case 10:
+        return `NET 3rd quarter ${year}`;
+      case 11:
+        return `NET 4th quarter ${year}`;
+      case 12:
+        return `NET 1st Half ${year}`;
+      case 13:
+        return `NET 2nd Half ${year}`;
+      case 14:
+        return `NET ${year}`;
+    }
+  }
+
+  // Get current date, in the user's local timezone, set to midnight for comparison.
   const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const launchDay = new Date(utcDate.getFullYear(), utcDate.getMonth(), utcDate.getDate());
+  const todayLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-  const timeOptions = { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true };
-  const timeString = utcDate.toLocaleTimeString(undefined, timeOptions);
+  // Get the launch date, converted to the user's local timezone, set to midnight for comparison.
+  // We need to construct a new Date object from the UTC date's local components
+  // after it has been implicitly converted to local time.
+  const launchDateLocal = new Date(utcDate.getFullYear(), utcDate.getMonth(), utcDate.getDate());
 
-  const diffInDays = Math.ceil((launchDay - today) / (1000 * 60 * 60 * 24));
+  // Format the time in the user's local timezone.
+  const timeFormatter = new Intl.DateTimeFormat(undefined, {
+    hour: 'numeric',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+  });
+  const timeString = timeFormatter.format(utcDate);
 
+  // Calculate the difference in days using local date comparisons.
+  // Both dates are at midnight in the local timezone, so the difference will be whole days.
+  const diffTime = launchDateLocal.getTime() - todayLocal.getTime();
+  const diffInDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // Use Math.ceil to correctly count partial days forward
+
+  // Helper function for ordinal day suffixes (st, nd, rd, th)
   function getDayWithOrdinal(n) {
     const s = ["th", "st", "nd", "rd"];
     const v = n % 100;
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
   }
 
+  // Determine the display string based on the day difference.
   if (diffInDays === 0) {
     return `Today at ${timeString}`;
   } else if (diffInDays === 1) {
     return `Tomorrow at ${timeString}`;
-  } else if (diffInDays > 1 && diffInDays < 4) {
-    const dayOfWeek = utcDate.toLocaleDateString(undefined, { weekday: 'long' });
+  } else if (diffInDays > 1 && diffInDays < 7) {
+    // Format the day of the week in the user's local timezone.
+    const dayOfWeekFormatter = new Intl.DateTimeFormat(undefined, { weekday: 'long' });
+    const dayOfWeek = dayOfWeekFormatter.format(utcDate); // Still format based on the original UTC date for accuracy
     return `This ${dayOfWeek} at ${timeString}`;
   } else {
-    const month = utcDate.toLocaleDateString(undefined, { month: 'long' });
-    const day = utcDate.getDate();
+    // For dates further out, format month and day with ordinal suffix.
+    const monthFormatter = new Intl.DateTimeFormat(undefined, { month: 'long' });
+    const month = monthFormatter.format(utcDate);
+    // Get the local day of the month for proper display.
+    const day = utcDate.getDate(); // This correctly gives the local day of the month
     const dayWithOrdinal = getDayWithOrdinal(day);
     return `${month} ${dayWithOrdinal} at ${timeString}`;
   }
@@ -81,7 +127,7 @@ function generateProbabilityColor(pC) {
 
 //Function to generate appropriate color based on sound delay
 function generateDelayColor(sD) {
-    const maxDelay = 600;
+    const maxDelay = 300;
 
     if (sD < 0) {
         return `rgb(0, 255, 0)`; // Should not happen in a real scenario, but handle for safety

@@ -88,6 +88,38 @@ $(document).ready(function () {
 						statusHTML +=   '</path></g></svg> ';
 						statusHTML +=   formatLaunchDate(launch.date);
 						statusHTML += '</p>';
+						//Draw sliding scale launch window
+						if (launch.window_start !== launch.window_end) {
+							var windowOpen = new Date(launch.window_start + 'Z');
+							var windowClose = new Date(launch.window_end + 'Z');
+							var launchTime = new Date(launch.date + 'Z');
+							var windowLength = windowClose.getTime() - windowOpen.getTime();
+							var launchDelay = launchTime.getTime() - windowOpen.getTime();
+							launchDelay = launchDelay / (1000 * 60);
+							windowLength = windowLength / (1000 * 60);
+							const launchDelayPercent = (launchDelay / windowLength) * 100;
+							const options = { hour: '2-digit', minute: '2-digit', hour12: true };
+							windowOpen = windowOpen.toLocaleTimeString('en-US', options);
+							windowClose = windowClose.toLocaleTimeString('en-US', options);
+							statusHTML += '<div id="launch-window">';
+							statusHTML +=   '<table>';
+							statusHTML +=     '<tr>';
+							statusHTML +=       '<td colspan="2">';
+							statusHTML +=         '<div class="launch-window-line-container">';
+							statusHTML +=           '<div class="launch-window-line">';
+							statusHTML +=             '<div class="launch-window-line-rocket" style="left:' + launchDelayPercent + '%">'
+							statusHTML +=               '<svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 256 256"><g fill="currentColor"><path d="m94.81 192l-29.45 22.24a8 8 0 0 1-12.81-4.51L40.19 154.1a8 8 0 0 1 1.66-6.86l30.31-36.33C71 134.25 76.7 161.43 94.81 192m119.34-44.76l-30.31-36.33c1.21 23.34-4.54 50.52-22.65 81.09l29.45 22.24a8 8 0 0 0 12.81-4.51l12.36-55.63a8 8 0 0 0-1.66-6.86" opacity="0.2"></path><path d="M152 224a8 8 0 0 1-8 8h-32a8 8 0 0 1 0-16h32a8 8 0 0 1 8 8m-24-112a12 12 0 1 0-12-12a12 12 0 0 0 12 12m95.62 43.83l-12.36 55.63a16 16 0 0 1-25.51 9.11L158.51 200h-61l-27.26 20.57a16 16 0 0 1-25.51-9.11l-12.36-55.63a16.09 16.09 0 0 1 3.32-13.71l28.56-34.26a123 123 0 0 1 8.57-36.67c12.9-32.34 36-52.63 45.37-59.85a16 16 0 0 1 19.6 0c9.34 7.22 32.47 27.51 45.37 59.85a123 123 0 0 1 8.57 36.67l28.56 34.26a16.09 16.09 0 0 1 3.32 13.71M99.43 184h57.14c21.12-37.54 25.07-73.48 11.74-106.88C156.55 47.64 134.49 29 128 24c-6.51 5-28.57 23.64-40.33 53.12c-13.31 33.4-9.36 69.34 11.76 106.88m-15 5.85q-16.15-29.35-19.6-57.69L48 152.36L60.36 208l.18-.13ZM208 152.36l-16.83-20.2q-3.42 28.28-19.56 57.69l23.85 18l.18.13Z"></path></g></svg>';
+							statusHTML +=             '</div>';
+							statusHTML +=           '</div>';
+							statusHTML +=       '</td>';
+							statusHTML +=     '</tr>';
+							statusHTML +=       '<td class="launch-window-open">Window Open<br/>' + windowOpen + '</td>';
+							statusHTML +=       '<td class="launch-window-close">Window Close<br/>' + windowClose + '</td>';
+							statusHTML +=     '<tr>';
+							statusHTML +=     '</tr>';
+							statusHTML +=   '</table>';
+							statusHTML += '</div>';
+						}
 						$('#launch-status').html(statusHTML);
 
 						//Generate location data
@@ -98,6 +130,13 @@ $(document).ready(function () {
 						locationHTML +=   '<path d="M17.5 9.5c0 3.038-2 6.5-5.5 10.5c-3.5-4-5.5-7.462-5.5-10.5a5.5 5.5 0 1 1 11 0Z"></path>';
 						locationHTML +=   '</g></svg> ' + launch.location;
 						locationHTML += '</h3>';
+						if (launch.on_location_name != null && launch.on_location_link != null) {
+							locationHTML += '<p>';
+							locationHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 14 14"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"><path d="M5.75 6.5c0 1.195.035 2.834.025 4.172m-.212-7.266c-.01-.187-.034-.44-.062-.717c-.094-.92-.773-1.774-1.69-1.9a4 4 0 0 0-.53-.04a4 4 0 0 0-.53.04c-.916.126-1.569.981-1.621 1.905C.985 5.248.767 8.172.786 10.672"/><path d="M.781 10.719a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0m7.5-4.219c0 1.202-.035 2.852-.024 4.195m.212-7.289c.01-.187.033-.44.061-.717c.094-.92.773-1.774 1.69-1.9a4 4 0 0 1 .53-.039q.267.001.53.039c.916.126 1.569.981 1.621 1.905c.145 2.561.364 5.496.344 8"/><path d="M13.25 10.719a2.5 2.5 0 1 1-5 0a2.5 2.5 0 1 1 5 0M9.512 4.23c-1.706-1.14-3.318-1.14-5.024 0"/></g></svg> ';
+							locationHTML += 'Watch from <a class="white-link" href="' +launch.on_location_link + '">' + launch.on_location_name + '</a> ';
+							locationHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.248 19C3.22 15.77 5.275 8.232 12.466 8.232V6.079a1.025 1.025 0 0 1 1.644-.862l5.479 4.307a1.108 1.108 0 0 1 0 1.723l-5.48 4.307a1.026 1.026 0 0 1-1.643-.861v-2.154C5.275 13.616 4.248 19 4.248 19"></path></svg>';
+							locationHTML += '</p>';
+						}
 						locationHTML += '<p>';
 						locationHTML +=   '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 36 36">';
 						locationHTML +=   '<path fill="currentColor" d="M28 34H8a1 1 0 0 0 0 2h20a1 1 0 0 0 0-2M18 9.53a2.75 2.75 0 1 0 2.75 2.75A2.75 2.75 0 0 0 18 9.53m0 3.89a1.15 1.15 0 0 1 0-2.29a1.15 1.15 0 1 1 0 2.29"/>';
@@ -163,10 +202,18 @@ $(document).ready(function () {
 						rocketHTML +=   '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256"><g fill="currentColor"><path d="m94.81 192l-29.45 22.24a8 8 0 0 1-12.81-4.51L40.19 154.1a8 8 0 0 1 1.66-6.86l30.31-36.33C71 134.25 76.7 161.43 94.81 192m119.34-44.76l-30.31-36.33c1.21 23.34-4.54 50.52-22.65 81.09l29.45 22.24a8 8 0 0 0 12.81-4.51l12.36-55.63a8 8 0 0 0-1.66-6.86" opacity="0.2"></path><path d="M152 224a8 8 0 0 1-8 8h-32a8 8 0 0 1 0-16h32a8 8 0 0 1 8 8m-24-112a12 12 0 1 0-12-12a12 12 0 0 0 12 12m95.62 43.83l-12.36 55.63a16 16 0 0 1-25.51 9.11L158.51 200h-61l-27.26 20.57a16 16 0 0 1-25.51-9.11l-12.36-55.63a16.09 16.09 0 0 1 3.32-13.71l28.56-34.26a123 123 0 0 1 8.57-36.67c12.9-32.34 36-52.63 45.37-59.85a16 16 0 0 1 19.6 0c9.34 7.22 32.47 27.51 45.37 59.85a123 123 0 0 1 8.57 36.67l28.56 34.26a16.09 16.09 0 0 1 3.32 13.71M99.43 184h57.14c21.12-37.54 25.07-73.48 11.74-106.88C156.55 47.64 134.49 29 128 24c-6.51 5-28.57 23.64-40.33 53.12c-13.31 33.4-9.36 69.34 11.76 106.88m-15 5.85q-16.15-29.35-19.6-57.69L48 152.36L60.36 208l.18-.13ZM208 152.36l-16.83-20.2q-3.42 28.28-19.56 57.69l23.85 18l.18.13Z"></path></g></svg> ';
 						rocketHTML +=   launch.rocket_name;
 						rocketHTML += '</h3>';
-						rocketHTML += '<p>';
-						rocketHTML += '';
-						rocketHTML += launch.rocket_full_name;
-						rocketHTML += '<p>';
+						if (launch.rocket_name != launch.rocket_full_name) {
+							rocketHTML += '<p>';
+							rocketHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 7a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3z"/><path d="M7 10a2 2 0 1 0 4 0a2 2 0 1 0-4 0m8-2h2m-2 4h2M7 16h10"/></g></svg> ';
+							rocketHTML += launch.rocket_full_name;
+							rocketHTML += '</p>';
+						}
+						if (launch.launch_service_provider != null) {
+							rocketHTML += '<p>';
+							rocketHTML += '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M18 15h-2v2h2m0-6h-2v2h2m2 6h-8v-2h2v-2h-2v-2h2v-2h-2V9h8M10 7H8V5h2m0 6H8V9h2m0 6H8v-2h2m0 6H8v-2h2M6 7H4V5h2m0 6H4V9h2m0 6H4v-2h2m0 6H4v-2h2m6-10V3H2v18h20V7z"/></svg> ';
+							rocketHTML += launch.launch_service_provider;
+							rocketHTML += '</p>';
+						}
 						$('#launch-rocket').html(rocketHTML);
                                         }
                                 });

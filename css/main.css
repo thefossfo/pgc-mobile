@@ -178,6 +178,54 @@ html, body {
 #user-map {
 	height:20vh;
 }
+#launch-window,#launch-window table {
+width:100%;
+}
+.launch-window-line-container {
+width: 100%;
+padding: 20px 0;
+box-sizing: border-box;
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.launch-window-line {
+width: 95%;
+height: 2px;
+background-color: #333;
+position: relative;
+}
+.launch-window-line::before, .launch-window-line::after {
+content: '';
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+width: 16px;
+height: 16px;
+border-radius: 50%;
+background-color: #007bff;
+box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+.launch-window-line::before {
+left: 0;
+transform: translate(-50%, -50%);
+}
+.launch-window-line::after {
+right: 0;
+transform: translate(50%, -50%);
+}
+.launch-window-line-rocket {
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+}
+.launch-window-open {
+text-align:left;
+}
+.launch-window-close {
+text-align:right;
+}
 
 /* Generic classes */
 .block-item {
