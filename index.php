@@ -14,6 +14,7 @@ $PAGE_TITLE = "PGC Mobile";
 $PAGE_LIST = array(
 	"HOME",
 	"SELECT",
+	"PAST",
 	"LAUNCH",
 	"CAMERA",
 	"SETTINGS",
@@ -22,6 +23,7 @@ $PAGE_LIST = array(
 $PAGE_SRC = array(
 	"include/home.php",
 	"include/select_launch.php",
+	"include/past_launches.php",
 	"include/show_launch.php",
 	"include/camera.php",
 	"include/settings.php",
@@ -29,6 +31,7 @@ $PAGE_SRC = array(
 );
 $PAGE_TITLES = array(
 	"Home",
+	"Select a launch",
 	"Select a launch",
 	"Launch details",
 	"Camera view",

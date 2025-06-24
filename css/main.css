@@ -226,6 +226,25 @@ text-align:left;
 .launch-window-close {
 text-align:right;
 }
+.launch-header-container {
+width: 100%;
+overflow-x: scroll;
+white-space: nowrap;
+-ms-overflow-style: none;
+scrollbar-width: none;
+}
+.scroll-container::-webkit-scrollbar {
+display: none;
+}
+.launch-header-item {
+display: inline-block;
+background-color: #02043b;
+margin-right:1vw;
+text-align: center;
+border: 1px solid #333;;
+border-radius:1vw;
+padding:1vw;
+}
 
 /* Generic classes */
 .block-item {

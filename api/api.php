@@ -1,10 +1,13 @@
 <?php
-// api_launches.php
+//If launch ID is passed
+if (isset($_GET['id']) && ctype_alnum(str_replace('-', '', $_GET['id']))) {
+	$launch_id = $_GET['id'];
+}
 
 // Set the content type to application/json
 header('Content-Type: application/json');
 
-// Enable CORS (for development purposes - adjust as needed for production)
+// Enable CORS
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Content-Type');
@@ -18,7 +21,11 @@ $dbname = 'pgc';
 $db = new db($dbhost, $dbuser, $dbpass, $dbname);
 
 // Pull the data
-$db->query('SELECT * FROM launch_data WHERE date >= NOW() - INTERVAL 1 HOUR ORDER BY date,net_precision ASC;');
+if (isset($launch_id)) {
+	$db->query('SELECT * FROM launch_data WHERE id="' . $launch_id . '"');
+} else {
+	$db->query('SELECT * FROM launch_data WHERE date >= NOW() - INTERVAL 1 HOUR ORDER BY date,net_precision ASC;');
+}
 $launches = $db->fetchAll();
 
 if ($launches) {

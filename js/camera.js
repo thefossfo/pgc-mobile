@@ -24,12 +24,24 @@ $(document).ready(function () {
       return;
     }
 
+    // Get the current URL
+    const currentUrl = window.location.href;
+
+    // Parse the URL to get the base URL (protocol, host, and path)
+    const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf("/")) + "/";
+
+    // Extract the launch ID from the URL
+    const launchId = getQueryParam(currentUrl, "id");
+    var launchIdURL = "";
+    if (launchId != null) {
+      launchIdURL = "?id=" + launchId;
+    }
+
+    // Construct the API URL
+    const apiUrl = baseUrl + "api/api.php" + launchIdURL;
+
     $.ajax({
-      url:
-        window.location.pathname.substring(
-          0,
-          window.location.pathname.lastIndexOf("/"),
-        ) + "/api/api.php",
+      url: apiUrl,
       method: "GET",
       dataType: "json",
       success: function (data) {

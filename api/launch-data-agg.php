@@ -10,7 +10,7 @@ $dbname = 'pgc';
 $db = new db($dbhost, $dbuser, $dbpass, $dbname);
 
 // SpaceDevs API endpoint for upcoming launches
-$api_url = 'https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=50';
+$api_url = 'https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=100';
 
 // Fetch data from the SpaceDevs API
 $response = file_get_contents($api_url);

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8">
+	<meta name="description" content="Track upcoming rocket launches with Personal Ground Control (PGC) and take advantage of its unque features including a launchpad compass and how long the sound from the rocket would take to reach you.">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
         <title><?php echo $PAGE_TITLE ?></title>
 	<link rel="manifest" href="manifest.json">

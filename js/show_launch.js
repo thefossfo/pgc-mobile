@@ -25,14 +25,17 @@ $(document).ready(function () {
         const currentUrl = window.location.href;
 
         // Parse the URL to get the base URL (protocol, host, and path)
-        const baseUrl =
-                currentUrl.substring(0, currentUrl.lastIndexOf("/")) + "/";
-
-        // Construct the API URL
-        const apiUrl = baseUrl + "api/api.php";
+        const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf("/")) + "/";
 
         // Extract the launch ID from the URL
-        const launchId = getQueryParam(currentUrl, "id");
+        let launchId = getQueryParam(currentUrl, "id");
+	if (launchId != null) {
+		launchIdURL = "?id=" + launchId;
+	}
+
+        // Construct the API URL
+        const apiUrl = baseUrl + "api/api.php" + launchIdURL;
+	console.log(apiUrl);
 
         // Fetch the launch data from your API
         $.ajax({
@@ -77,7 +80,7 @@ $(document).ready(function () {
 						//Generate status HTML
 						//Probability needs to be in integer format
 						const statusIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 56 56"><path fill="currentColor" d="m50.923 21.002l.046.131l.171.566l.143.508l.061.232l.1.42a23.93 23.93 0 0 1-2.653 17.167a23.93 23.93 0 0 1-13.57 10.89l-.404.12l-.496.128l-.717.17a1.89 1.89 0 0 1-2.288-1.558a2.127 2.127 0 0 1 1.606-2.389l.577-.145q.54-.142.929-.273a19.93 19.93 0 0 0 10.899-8.943a19.93 19.93 0 0 0 2.292-13.923l-.069-.313l-.092-.365l-.115-.418l-.138-.47a2.135 2.135 0 0 1 1.26-2.602a1.894 1.894 0 0 1 2.458 1.067M7.385 19.92q.065.02.128.044A2.127 2.127 0 0 1 8.78 22.55q-.27.909-.39 1.513a19.93 19.93 0 0 0 2.295 13.91a19.93 19.93 0 0 0 10.911 8.947l.306.097l.174.05l.39.106l.694.171a2.135 2.135 0 0 1 1.623 2.393a1.894 1.894 0 0 1-2.152 1.594l-.138-.025l-.576-.135l-.51-.13l-.446-.125l-.2-.06A23.93 23.93 0 0 1 7.22 39.972a23.93 23.93 0 0 1-2.647-17.197l.077-.32l.1-.375l.194-.665l.076-.25a1.89 1.89 0 0 1 2.365-1.246M28.051 12c8.837 0 16 7.163 16 16s-7.163 16-16 16s-16-7.163-16-16s7.164-16 16-16m0 4c-6.627 0-12 5.373-12 12s5.373 12 12 12c6.628 0 12-5.373 12-12s-5.372-12-12-12m0-12a23.93 23.93 0 0 1 16.217 6.306l.239.227l.275.274l.31.322l.346.369a1.89 1.89 0 0 1-.205 2.76a2.127 2.127 0 0 1-2.873-.196q-.326-.345-.605-.617l-.35-.334l-.16-.143A19.93 19.93 0 0 0 28.051 8a19.93 19.93 0 0 0-13.204 4.976l-.114.102l-.253.24l-.287.285l-.495.515c-.76.809-2.014.9-2.883.21a1.894 1.894 0 0 1-.305-2.662l.09-.106l.405-.431l.368-.378q.262-.263.484-.465A23.93 23.93 0 0 1 28.05 4"/></svg>';
-						if (Number.isInteger(launch.probability)) {
+						if (Number.isInteger(launch.probability) && launch.status !== 'Launch Successful' && launch.status !== 'Launch in Flight') {
 							statusHTML = '<h3 style="color:' + generateProbabilityColor(launch.probability) + '">' + statusIcon + ' ' + launch.probability + '% ' + launch.status + '</h3>';
 						} else {
 							statusHTML = '<h3>' + statusIcon + ' ' + launch.status + '</h3>';
@@ -86,7 +89,7 @@ $(document).ready(function () {
 						statusHTML +=   '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none">';
 						statusHTML +=   '<path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path><path fill="currentColor" d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2m0 2a8 8 0 1 0 0 16a8 8 0 0 0 0-16m0 2a1 1 0 0 1 .993.883L13 7v4.586l2.707 2.707a1 1 0 0 1-1.32 1.497l-.094-.083l-3-3a1 1 0 0 1-.284-.576L11 12V7a1 1 0 0 1 1-1">i';
 						statusHTML +=   '</path></g></svg> ';
-						statusHTML +=   formatLaunchDate(launch.date);
+						statusHTML +=   formatLaunchDate(launch.date,launch.net_precision);
 						statusHTML += '</p>';
 						//Draw sliding scale launch window
 						if (launch.window_start !== launch.window_end) {
