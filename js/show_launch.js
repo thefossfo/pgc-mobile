@@ -52,7 +52,11 @@ $(document).ready(function () {
 						$('#header').contents().filter(function() {
 						    return this.nodeType === 3; // Node type 3 is a text node
 						}).each(function() {
-						    this.nodeValue = ' ' + launch.mission_name;
+						    if (launch.mission_name) {
+						    	this.nodeValue = ' ' + launch.mission_name;
+						    } else {
+							this.nodeValue = ' ' + launch.name
+						    }
 						});
 						const launchTimeUTCString = launch.date;
 						if (launchTimeUTCString) {
@@ -71,10 +75,14 @@ $(document).ready(function () {
 							const localLaunchTime = new Date(
 								utcDate.getTime() - localOffsetMilliseconds,
 							);
-
-							countdownInterval = setInterval(function () {
-								updateCountdown(localLaunchTime.toISOString()); // Pass the adjusted local time
-							}, 1000);
+							if (launch.status != 'On Hold') {
+								console.log(launch.status);
+								countdownInterval = setInterval(function () {
+									updateCountdown(localLaunchTime.toISOString()); // Pass the adjusted local time
+								}, 1000);
+							} else {
+								$("#launch-countdown").text("On Hold");
+							}
 						}
 
 						//Generate status HTML
@@ -192,13 +200,17 @@ $(document).ready(function () {
 						}, 100);
 
 						//Generate details data
-						detailsHTML =  '<h3>';
-						detailsHTML +=   '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">';
-						detailsHTML +=   '<path fill="currentColor" fill-rule="evenodd" d="M256 42.667C138.18 42.667 42.667 138.179 42.667 256c0 117.82 95.513 213.334 213.333 213.334c117.822 0 213.334-95.513 213.334-213.334S373.822 42.667 256 42.667m0 384c-94.105 0-170.666-76.561-170.666-170.667S161.894 85.334 256 85.334c94.107 0 170.667 76.56 170.667 170.666S350.107 426.667 256 426.667m26.714-256c0 15.468-11.262 26.667-26.497 26.667c-15.851 0-26.837-11.2-26.837-26.963c0-15.15 11.283-26.37 26.837-26.37c15.235 0 26.497 11.22 26.497 26.666m-48 64h42.666v128h-42.666z"/></svg> ';
-						detailsHTML +=   launch.mission_name;
-						detailsHTML += '</h3>';
-						detailsHTML += '<p>' + launch.mission_description + '</p>';
-						$('#launch-details').html(detailsHTML);
+						if (launch.mission_name) {
+							detailsHTML =  '<h3>';
+							detailsHTML +=   '<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">';
+							detailsHTML +=   '<path fill="currentColor" fill-rule="evenodd" d="M256 42.667C138.18 42.667 42.667 138.179 42.667 256c0 117.82 95.513 213.334 213.333 213.334c117.822 0 213.334-95.513 213.334-213.334S373.822 42.667 256 42.667m0 384c-94.105 0-170.666-76.561-170.666-170.667S161.894 85.334 256 85.334c94.107 0 170.667 76.56 170.667 170.666S350.107 426.667 256 426.667m26.714-256c0 15.468-11.262 26.667-26.497 26.667c-15.851 0-26.837-11.2-26.837-26.963c0-15.15 11.283-26.37 26.837-26.37c15.235 0 26.497 11.22 26.497 26.666m-48 64h42.666v128h-42.666z"/></svg> ';
+							detailsHTML +=   launch.mission_name;
+							detailsHTML += '</h3>';
+							detailsHTML += '<p>' + launch.mission_description + '</p>';
+							$('#launch-details').html(detailsHTML);
+						} else {
+							$('#launch-details').hide();
+						}
 
 						//Generate rocket data
 						rocketHTML =  '<h3>';
