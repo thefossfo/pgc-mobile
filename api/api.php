@@ -35,7 +35,8 @@ if ($launches) {
         $unescaped_launch = []; // Create a new array for the unescaped data
         foreach ($launch as $key => $value) {
             if (is_string($value)) {
-                $unescaped_launch[$key] = stripslashes($value);
+		$collapsed = preg_replace('/(\\\\[rn])+/', ' ', $value);
+                $unescaped_launch[$key] = stripslashes($collapsed);
             } else {
                 $unescaped_launch[$key] = $value; // Keep non-string values as they are
             }

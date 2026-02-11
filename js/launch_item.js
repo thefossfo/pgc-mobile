@@ -29,6 +29,12 @@ function launchItem(launch) {
 		case 'China Aerospace Science and Technology Corporation':
 			launchHeaderRenderLSP('China Aerospace');
 			break
+		case 'China Rocket Co. Ltd.':
+			launchHeaderRenderLSP('ChinaRocket');
+			break
+		case 'Firefly Aerospace':
+			launchHeaderRenderLSP('Firefly');
+			break
 		case 'Gilmour Space Technologies':
 			launchHeaderRenderLSP('Gilmour Space');
 			break
@@ -43,6 +49,9 @@ function launchItem(launch) {
 			break
 		case 'Khrunichev State Research and Production Space Center':
 			launchHeaderRenderLSP('Khrunichev');
+			break
+		case 'Kii-based Advanced & Instant ROcket System':
+			launchHeaderRenderLSP('KAIROS');
 			break
 		case 'Korea Aerospace Research Institute':
 			launchHeaderRenderLSP('KARI');
