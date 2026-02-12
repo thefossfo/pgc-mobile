@@ -320,3 +320,46 @@ padding:1vw;
     display: flex;
     overflow: hidden;
 }
+
+/* Optimize for desktop viewing */
+@media (min-width: 768px) {
+
+  /* 1. Reset root font size to prevent compounding (if html/body uses vw/vh) */
+  html {
+    font-size: 16px !important;   /* Standard desktop base; or 62.5% for rem convenience */
+  }
+
+  /* 2. Target common mobile-optimized font patterns */
+  body,
+  body * {
+    font-size: clamp(14px, 3.5vw, 20px) !important;   /* Flexible but capped; adjust min/max */
+    /* Alternative fixed: font-size: 16px !important; */
+  }
+
+  /* 3. Specifically nuke huge vw/vh fonts in content blocks */
+  .block-item,
+  [class*="block"], [class*="item"], [class*="card"], [class*="text"], p, h1, h2, h3, h4, span, div {
+    font-size: 16px !important;      /* Start conservative; bump to 18px or 1.1rem if too small */
+    line-height: 1.4 !important;
+    /* If using rem: font-size: 1rem !important; */
+  }
+
+  /* Change mouse cursor when hovering over launch items */
+  .launch-item { cursor: pointer; }
+
+  /* Adjust size of header and footer */
+  #header { font-size: 3vh !important; }
+  .bottom-menu-item  > a > svg { font-size: 5vh !important; }
+
+  /* 4. If headings/countdowns are extra huge (common with vw) */
+  h1, h2 {
+    font-size: 24px !important;      /* Or clamp(20px, 5vw, 32px) for some scaling */
+  }
+
+  /* 5. Prevent vh-based heights/paddings from going crazy (if present) */
+  [style*="vh"], [class*="vh"] {
+    height: auto !important;
+    max-height: 80vh !important;
+    padding: 1rem 0 !important;   /* Replace huge vh paddings */
+  }
+}
