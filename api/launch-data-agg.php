@@ -10,7 +10,7 @@ $dbname = 'pgc';
 $db = new db($dbhost, $dbuser, $dbpass, $dbname);
 
 // SpaceDevs API endpoint for upcoming launches
-$api_url = 'https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=100';
+$api_url = 'https://ll.thespacedevs.com/2.3.0/launches/upcoming/?limit=100';
 
 // Fetch data from the SpaceDevs API
 $response = file_get_contents($api_url);
@@ -94,11 +94,13 @@ foreach ($launches as $launch) {
     $pad_name = isset($launch['pad']['name']) ? $db->escapeString($launch['pad']['name']) : null;
     $pad_latitude = isset($launch['pad']['latitude']) ? floatval($launch['pad']['latitude']) : null;
     $pad_longitude = isset($launch['pad']['longitude']) ? floatval($launch['pad']['longitude']) : null;
-    $rocket_name = isset($launch['rocket']['configuration']['name']) ? $db->escapeString($launch['rocket']['configuration']['name']) : null;
-    $rocket_full_name = isset($launch['rocket']['configuration']['full_name']) ? $db->escapeString($launch['rocket']['configuration']['full_name']) : null;
+    $rocket_name = isset($launch['rocket']['name']) ? $db->escapeString($launch['rocket']['name']) : null;
+    //$rocket_name = isset($launch['rocket']['configuration']['name']) ? $db->escapeString($launch['rocket']['configuration']['name']) : null;
+    $rocket_full_name = isset($launch['rocket']['full_name']) ? $db->escapeString($launch['rocket']['full_name']) : null;
+    //$rocket_full_name = isset($launch['rocket']['configuration']['full_name']) ? $db->escapeString($launch['rocket']['configuration']['full_name']) : null;
     $mission_name = isset($launch['mission']['name']) ? $db->escapeString($launch['mission']['name']) : null;
     $mission_description = isset($launch['mission']['description']) ? $db->escapeString($launch['mission']['description']) : null;
-    $image = $db->escapeString($launch['image']);
+    $image = isset($launch['image']['image_url']) ? $db->escapeString($launch['image']['image_url']) : null;
     $launch_service_provider = isset($launch['launch_service_provider']['name']) ? $db->escapeString($launch['launch_service_provider']['name']) : null;
 
     // Corrected: Pull net_precision 'id' value, cast to int or null
